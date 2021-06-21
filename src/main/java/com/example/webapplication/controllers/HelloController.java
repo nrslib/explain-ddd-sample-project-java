@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class HelloController {
     @GetMapping
     public String get() {
-        var story = new UserStoryId("test");
-        var test =story.getValue();
         return "hello";
     }
 }
