@@ -1,6 +1,5 @@
 package com.example.webapplication.controllers;
 
-import com.example.scrum.domain.models.userstory.UserStoryId;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
