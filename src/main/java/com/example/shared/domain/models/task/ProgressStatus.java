@@ -1,4 +1,4 @@
-package com.example.scrum.domain.models.task;
+package com.example.shared.domain.models.task;
 
 public enum ProgressStatus {
     CREATED,

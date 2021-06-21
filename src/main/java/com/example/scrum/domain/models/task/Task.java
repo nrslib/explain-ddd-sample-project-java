@@ -1,14 +1,17 @@
 package com.example.scrum.domain.models.task;
 
+import com.example.applicationsupportstack.domainsupport.aggregate.AggregateRoot;
+import com.example.scrum.domain.models.task.events.TaskStatusChangedEvent;
 import com.example.scrum.domain.models.user.UserContext;
 import com.example.scrum.domain.models.user.UserId;
 import com.example.scrum.domain.models.userstory.UserStoryId;
+import com.example.shared.domain.models.task.ProgressStatus;
 import lombok.Getter;
 
 import java.util.List;
 
 @Getter
-public class Task {
+public class Task extends AggregateRoot {
     private final TaskId id;
     private final UserStoryId storyId;
     private Description description;
@@ -36,6 +39,7 @@ public class Task {
             throw new IllegalChangeStatusException("ステータス変更の準備が整っていません");
         }
 
+        registerEvent(new TaskStatusChangedEvent(this.id));
         this.status = status;
     }
 

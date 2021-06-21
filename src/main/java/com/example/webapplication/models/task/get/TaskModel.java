@@ -1,6 +1,6 @@
 package com.example.webapplication.models.task.get;
 
-import com.example.scrum.domain.models.task.ProgressStatus;
+import com.example.shared.domain.models.task.ProgressStatus;
 import lombok.Getter;
 
 import java.util.List;

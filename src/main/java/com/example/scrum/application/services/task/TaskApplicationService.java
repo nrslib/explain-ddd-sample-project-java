@@ -2,9 +2,12 @@ package com.example.scrum.application.services.task;
 
 import com.example.applicationsupportstack.applicationsupport.exceptions.NotFoundException;
 import com.example.scrum.domain.models.task.*;
+import com.example.scrum.domain.models.task.events.TaskCreatedEvent;
 import com.example.scrum.domain.models.user.UserContext;
 import com.example.scrum.domain.models.userstory.UserStoryId;
 import com.example.scrum.domain.models.userstory.UserStoryRepository;
+import com.example.shared.domain.models.task.ProgressStatus;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,11 +15,13 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class TaskApplicationService {
+    private final ApplicationEventPublisher publisher;
     private final UserContext userContext;
     private final TaskRepository taskRepository;
     private final UserStoryRepository userStoryRepository;
 
-    public TaskApplicationService(UserContext userContext, TaskRepository taskRepository, UserStoryRepository userStoryRepository) {
+    public TaskApplicationService(ApplicationEventPublisher publisher, UserContext userContext, TaskRepository taskRepository, UserStoryRepository userStoryRepository) {
+        this.publisher = publisher;
         this.userContext = userContext;
         this.taskRepository = taskRepository;
         this.userStoryRepository = userStoryRepository;
@@ -42,6 +47,7 @@ public class TaskApplicationService {
 
         var story = optStory.get();
         var task = story.createTask(new Description(command.getDescription()));
+        publisher.publishEvent(new TaskCreatedEvent(this));
 
         taskRepository.save(task);
     }

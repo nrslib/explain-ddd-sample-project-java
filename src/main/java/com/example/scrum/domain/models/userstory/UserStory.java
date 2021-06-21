@@ -1,7 +1,7 @@
 package com.example.scrum.domain.models.userstory;
 
 import com.example.scrum.domain.models.task.Description;
-import com.example.scrum.domain.models.task.ProgressStatus;
+import com.example.shared.domain.models.task.ProgressStatus;
 import com.example.scrum.domain.models.task.Task;
 import com.example.scrum.domain.models.task.TaskId;
 import lombok.Getter;
