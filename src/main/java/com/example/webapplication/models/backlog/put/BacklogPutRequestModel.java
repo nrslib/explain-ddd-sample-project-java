@@ -6,5 +6,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class BacklogPutRequestModel {
-    private int estimation;
+    private String story;
 }

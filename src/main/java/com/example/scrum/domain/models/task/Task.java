@@ -1,18 +1,21 @@
 package com.example.scrum.domain.models.task;
 
+import com.example.scrum.domain.models.user.UserContext;
 import com.example.scrum.domain.models.user.UserId;
 import com.example.scrum.domain.models.userstory.UserStoryId;
+import lombok.Getter;
 
-import java.util.ArrayList;
+import java.util.List;
 
+@Getter
 public class Task {
     private final TaskId id;
     private final UserStoryId storyId;
     private Description description;
     private ProgressStatus status;
-    private ArrayList<UserId> signupMembers;
+    private List<UserId> signupMembers;
 
-    public Task(TaskId id, UserStoryId storyId, Description description, ProgressStatus status, ArrayList<UserId> signupMembers) {
+    public Task(TaskId id, UserStoryId storyId, Description description, ProgressStatus status, List<UserId> signupMembers) {
         this.id = id;
         this.storyId = storyId;
         this.description = description;
@@ -36,7 +39,8 @@ public class Task {
         this.status = status;
     }
 
-    public void signup(UserId userId) {
+    public void signup(UserContext user) {
+        var userId = user.getId();
         if (signupMembers.stream().anyMatch(x -> x.equals(userId))){
             return;
         }

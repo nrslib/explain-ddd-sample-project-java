@@ -1,7 +1,6 @@
 package com.example.scrum.application.services.backlog;
 
 import com.example.applicationsupportstack.applicationsupport.exceptions.NotFoundException;
-import com.example.scrum.domain.models.user.UserContext;
 import com.example.scrum.domain.models.userstory.*;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,11 +10,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class BacklogApplicationService {
-    private final UserContext userContext;
     private final UserStoryRepository userStoryRepository;
 
-    public BacklogApplicationService(UserContext userContext, UserStoryRepository userStoryRepository) {
-        this.userContext = userContext;
+    public BacklogApplicationService(UserStoryRepository userStoryRepository) {
         this.userStoryRepository = userStoryRepository;
     }
 
@@ -35,6 +32,28 @@ public class BacklogApplicationService {
         var story = new UserStory(id, command.getStory());
 
         userStoryRepository.save(story);
+    }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public void updateUserStory(BacklogUpdateUserStoryCommand command) {
+        Objects.requireNonNull(command);
+
+        var id = new UserStoryId(command.getId());
+        var optStory = userStoryRepository.find(id);
+
+        optStory.ifPresentOrElse(
+                userStory -> {
+                    var story = command.getStory();
+                    if (story != null) {
+                        userStory.modifyStory(story);
+                    }
+
+                    userStoryRepository.save(userStory);
+                },
+                () -> {
+                    throw new NotFoundException("Unknown story of id: " + id);
+                }
+        );
     }
 
     @Transactional

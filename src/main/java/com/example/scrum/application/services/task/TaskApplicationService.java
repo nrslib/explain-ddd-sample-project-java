@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public class TaskApplicationService {
     private final UserContext userContext;
@@ -19,6 +20,14 @@ public class TaskApplicationService {
         this.userContext = userContext;
         this.taskRepository = taskRepository;
         this.userStoryRepository = userStoryRepository;
+    }
+
+    public Optional<Task> getTask(String aId) {
+        Objects.requireNonNull(aId);
+
+        var id = new TaskId(aId);
+
+        return taskRepository.find(id);
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
@@ -42,7 +51,7 @@ public class TaskApplicationService {
         Objects.requireNonNull(id);
 
         var task = getTaskOrThrowNotFound(id);
-        task.signup(userContext.getId());
+        task.signup(userContext);
 
         taskRepository.save(task);
     }
